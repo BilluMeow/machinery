@@ -3,6 +3,7 @@ package machinery
 import (
 	"errors"
 	"fmt"
+	"github.com/opentracing/opentracing-go"
 	"os"
 	"os/signal"
 	"syscall"
@@ -14,7 +15,6 @@ import (
 	"github.com/RichardKnop/machinery/v1/retry"
 	"github.com/RichardKnop/machinery/v1/tasks"
 	"github.com/RichardKnop/machinery/v1/tracing"
-	"github.com/opentracing/opentracing-go"
 )
 
 // Worker represents a single worker process
@@ -53,6 +53,23 @@ func (worker *Worker) LaunchAsync(errorsChan chan<- error) {
 
 	// Log some useful information about worker configuration
 	log.INFO.Printf("Launching a worker with the following settings:")
+
+	log.ERROR.Printf("Abeer: This should be ERROR")
+	log.ERROR.Print("Abeer: This should be ERROR")
+	log.ERROR.Println("Abeer: This should be ERROR")
+
+	log.WARNING.Printf("Abeer: This should be WARNING")
+	log.WARNING.Print("Abeer: This should be WARNING")
+	log.WARNING.Println("Abeer: This should be WARNING")
+
+	log.INFO.Printf("Abeer: This should be INFO")
+	log.INFO.Print("Abeer: This should be INFO")
+	log.INFO.Println("Abeer: This should be INFO")
+
+	log.FATAL.Printf("Abeer: This is FATAL but should be ERROR")
+	log.FATAL.Print("Abeer: This is FATAL but should be ERROR")
+	log.FATAL.Println("Abeer: This is FATAL but should be ERROR")
+
 	log.INFO.Printf("- Broker: %s", cnf.Broker)
 	if worker.Queue == "" {
 		log.INFO.Printf("- DefaultQueue: %s", cnf.DefaultQueue)
@@ -395,22 +412,22 @@ func (worker *Worker) SetErrorHandler(handler func(err error)) {
 	worker.errorHandler = handler
 }
 
-//SetPreTaskHandler sets a custom handler func before a job is started
+// SetPreTaskHandler sets a custom handler func before a job is started
 func (worker *Worker) SetPreTaskHandler(handler func(*tasks.Signature)) {
 	worker.preTaskHandler = handler
 }
 
-//SetPostTaskHandler sets a custom handler for the end of a job
+// SetPostTaskHandler sets a custom handler for the end of a job
 func (worker *Worker) SetPostTaskHandler(handler func(*tasks.Signature)) {
 	worker.postTaskHandler = handler
 }
 
-//SetGetQueueHandler sets a get queue handler to fetch queue name from
+// SetGetQueueHandler sets a get queue handler to fetch queue name from
 func (worker *Worker) SetGetQueueHandler(handler func() string) {
 	worker.getQueueHandler = handler
 }
 
-//GetServer returns server
+// GetServer returns server
 func (worker *Worker) GetServer() *Server {
 	return worker.server
 }
